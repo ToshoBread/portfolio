@@ -1,0 +1,19 @@
+---
+import ProjectCard from './ProjectCard.astro';
+import { projects } from '../data/projects';
+---
+
+<section id="work" class="fade-in py-32 px-8 md:px-16 lg:px-24">
+  <div class="max-w-6xl">
+    <div class="flex items-baseline gap-4 mb-4">
+      <h2 class="text-4xl font-bold text-rosepine-light">projects</h2>
+      <span class="text-rosepine-subtle font-mono text-sm">(that actually work)</span>
+    </div>
+
+    <div class="grid gap-6">
+      {projects.map((project) => (
+        <ProjectCard {...project} />
+      ))}
+    </div>
+  </div>
+</section>

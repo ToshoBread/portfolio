@@ -1,0 +1,54 @@
+---
+import MenuIcon from './icons/MenuIcon.astro';
+
+const navLinks = [
+  { href: '#work', label: 'work' },
+  { href: '#about', label: 'about' },
+  { href: '#contact', label: 'contact' },
+];
+---
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-rosepine-base/80 backdrop-blur-md">
+  <div class="container mx-auto flex items-center justify-between px-4 py-4">
+    <a href="#top" class="text-lg font-medium text-rosepine-light hover:text-rosepine-rose transition-colors">
+      Zion
+    </a>
+    <div class="hidden md:flex items-center gap-6">
+      {navLinks.map((link) => (
+        <a
+          href={link.href}
+          class="text-sm text-rosepine-subtle hover:text-rosepine-light transition-colors"
+        >
+          {link.label}
+        </a>
+      ))}
+    </div>
+    <button
+      id="mobile-menu-btn"
+      class="md:hidden text-rosepine-subtle hover:text-rosepine-light"
+      aria-label="Toggle menu"
+    >
+      <MenuIcon />
+    </button>
+  </div>
+  <div id="mobile-menu" class="hidden md:hidden bg-rosepine-surface border-t border-rosepine-overlay">
+    <div class="container mx-auto px-4 py-4 flex flex-col gap-4">
+      {navLinks.map((link) => (
+        <a
+          href={link.href}
+          class="text-sm text-rosepine-subtle hover:text-rosepine-light transition-colors"
+        >
+          {link.label}
+        </a>
+      ))}
+    </div>
+  </div>
+</nav>
+
+<script>
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  btn?.addEventListener('click', () => {
+    menu?.classList.toggle('hidden');
+  });
+</script>

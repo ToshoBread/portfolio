@@ -1,0 +1,52 @@
+---
+import PlayIcon from './icons/PlayIcon.astro';
+import GitHubIcon from './icons/GitHubIcon.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  tags: string[];
+  repo: string;
+  live?: string;
+}
+
+const { title, description, tags, repo, live } = Astro.props;
+---
+
+<div
+  class:list={[
+    'group bg-rosepine-surface rounded-2xl p-8 hover:bg-rosepine-overlay hover:translate-x-5 transition-all relative',
+    live && 'cursor-pointer',
+  ]}
+  {...live && { onclick: `window.open('${live}', '_blank')` }}
+>
+  <div class="absolute top-8 right-8 flex gap-3">
+    {live && (
+      <a
+        href={live}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-rosepine-subtle hover:text-rosepine-light transition-colors"
+        onclick="event.stopPropagation()"
+      >
+        <PlayIcon />
+      </a>
+    )}
+    <a
+      href={repo}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="text-rosepine-subtle hover:text-rosepine-light transition-colors"
+      onclick="event.stopPropagation()"
+    >
+      <GitHubIcon />
+    </a>
+  </div>
+  <h3 class="text-xl font-semibold text-rosepine-light mb-3">{title}</h3>
+  <p class="text-rosepine-subtle text-sm leading-relaxed mb-6">{description}</p>
+  <div class="flex flex-wrap gap-2">
+    {tags.map((tag) => (
+      <span class="text-xs font-mono px-2 py-1 bg-rosepine-base text-rosepine-iris rounded">{tag}</span>
+    ))}
+  </div>
+</div>

@@ -1,0 +1,35 @@
+---
+import type { Skill } from '../data/skills';
+
+interface Props {
+  title: string;
+  accent: 'rose' | 'pine' | 'iris' | 'gold';
+  skills: Skill[];
+}
+
+const { title, accent, skills } = Astro.props;
+
+const accentClasses = {
+  rose: 'text-rosepine-rose',
+  pine: 'text-rosepine-pine',
+  iris: 'text-rosepine-iris',
+  gold: 'text-rosepine-gold',
+};
+
+const badgeClass = 'px-3 py-1.5 bg-rosepine-base text-rosepine-light text-sm rounded-lg';
+---
+
+<div>
+  <h3 class={`text-sm font-mono uppercase tracking-wider mb-6 ${accentClasses[accent]}`}>{title}</h3>
+  <div class="flex flex-wrap gap-2 mb-8">
+    {skills.map((skill) => (
+      skill.url ? (
+        <a href={skill.url} target="_blank" rel="noopener noreferrer" class={`${badgeClass} hover:text-rosepine-iris transition-colors`}>
+          {skill.name}
+        </a>
+      ) : (
+        <span class={badgeClass}>{skill.name}</span>
+      )
+    ))}
+  </div>
+</div>

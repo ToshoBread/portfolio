@@ -1,0 +1,71 @@
+---
+import profile from '../images/profile.png';
+import SkillGroup from './SkillGroup.astro';
+import { skillGroups } from '../data/skills';
+---
+
+<section id="about" class="fade-in py-32 px-8 md:px-16 lg:px-24 bg-rosepine-surface">
+    <div>
+        <div class="flex items-baseline gap-4 mb-16">
+            <h2 class="text-4xl font-bold text-rosepine-light">about me</h2>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-12">
+            <div>
+                <div class="relative aspect-square rounded-3xl overflow-hidden bg-rosepine-overlay">
+                    <img
+                        src={profile.src}
+                        alt="Zion Nathan Dionisio"
+                        class="w-full h-full object-cover"
+                        width={profile.width}
+                        height={profile.height}
+                    />
+                    <div class="absolute bottom-4 left-1/2 -translate-x-1/2">
+                        <div class="bg-rosepine-base/90 backdrop-blur-sm rounded-xl px-4 py-2">
+                            <span class="text-rosepine-rose text-sm font-mono whitespace-nowrap">status: sore from wrestling rust</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-6 text-rosepine-light leading-relaxed">
+                <p>
+                    Hi! I'm the dev who will spend a few hours reading documentation after a coffee or two.
+                </p>
+                <p>
+                    I like code because it's honest. It does exactly what you tell
+                    it to do, which is what makes it so complex.
+                    I'm drawn to the puzzle-solving part, the moment where something clicks and
+                    you wonder why you didn't see it before.
+                </p>
+                <p>
+                    When I'm not programming: I'm probably learning a skill such as Japanese,
+                    watching anime (highly likely), or pretending I'll start that side project soon.
+                </p>
+
+                <div class="mt-10 grid grid-cols-3 gap-4">
+                    <div class="bg-rosepine-base rounded-xl p-4 text-center">
+                        <span class="text-rosepine-light text-sm font-medium">Researcher</span>
+                        <span class="text-rosepine-subtle text-xs block mt-1">Reading the docs, so you don't have to</span>
+                    </div>
+                    <div class="bg-rosepine-base rounded-xl p-4 text-center">
+                        <span class="text-rosepine-light text-sm font-medium">Engineer</span>
+                        <span class="text-rosepine-subtle text-xs block mt-1">What do you mean the function isn't O(1)?</span>
+                    </div>
+                    <div class="bg-rosepine-base rounded-xl p-4 text-center">
+                        <span class="text-rosepine-light text-sm font-medium">Learner</span>
+                        <span class="text-rosepine-subtle text-xs block mt-1">I don't mind learning
+                            <a href="https://groovy-lang.org/" target="_blank" rel="noopener noreferrer" class="underline hover:text-rosepine-iris">Groovy</a>
+                            for a project</span>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                {skillGroups.map((group) => (
+                <SkillGroup title={group.title} accent={group.accent} skills={group.skills} />
+                ))}
+            </div>
+        </div>
+    </div>
+</section>
