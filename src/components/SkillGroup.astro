@@ -3,7 +3,7 @@ import type { Skill } from '../data/skills';
 
 interface Props {
   title: string;
-  accent: 'rose' | 'pine' | 'iris' | 'gold';
+  accent: 'rose' | 'pine' | 'iris' | 'gold' | 'foam';
   skills: Skill[];
 }
 
@@ -14,6 +14,7 @@ const accentClasses = {
   pine: 'text-rosepine-pine',
   iris: 'text-rosepine-iris',
   gold: 'text-rosepine-gold',
+  foam: 'text-rosepine-foam',
 };
 
 const badgeClass = 'px-3 py-1.5 bg-rosepine-base text-rosepine-light text-sm rounded-lg';

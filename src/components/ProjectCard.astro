@@ -15,7 +15,7 @@ const { title, description, tags, repo, live } = Astro.props;
 
 <div
   class:list={[
-    'group bg-rosepine-surface rounded-2xl p-8 hover:bg-rosepine-overlay hover:translate-x-5 transition-all relative',
+    'group bg-rosepine-surface rounded-2xl p-8 hover:bg-rosepine-overlay transition-all relative',
     live && 'cursor-pointer',
   ]}
   {...live && { onclick: `window.open('${live}', '_blank')` }}
@@ -42,8 +42,8 @@ const { title, description, tags, repo, live } = Astro.props;
       <GitHubIcon />
     </a>
   </div>
-  <h3 class="text-xl font-semibold text-rosepine-light mb-3">{title}</h3>
-  <p class="text-rosepine-subtle text-sm leading-relaxed mb-6">{description}</p>
+  <h3 class="text-xl font-semibold text-rosepine-light mb-3 font-body">{title}</h3>
+  <p class="text-rosepine-subtle text-sm leading-relaxed mb-6 font-body">{description}</p>
   <div class="flex flex-wrap gap-2">
     {tags.map((tag) => (
       <span class="text-xs font-mono px-2 py-1 bg-rosepine-base text-rosepine-iris rounded">{tag}</span>

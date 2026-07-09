@@ -6,7 +6,7 @@ export interface Skill {
 
 export interface SkillGroupData {
   title: string;
-  accent: "rose" | "pine" | "iris" | "gold";
+  accent: "rose" | "pine" | "iris" | "gold" | "foam";
   skills: Skill[];
 }
 
@@ -33,6 +33,19 @@ export const skillGroups: SkillGroupData[] = [
       { name: "Astro", url: "https://astro.build/" },
       { name: "Tailwind CSS", url: "https://tailwindcss.com/" },
       { name: "Node.js", url: "https://nodejs.org/" },
+      { name: "Express", url: "https://expressjs.com/" },
+    ],
+  },
+  {
+    title: "Databases",
+    accent: "foam",
+    skills: [
+      { name: "MySQL", url: "https://www.mysql.com/" },
+      { name: "PostgreSQL", url: "https://www.postgresql.org/" },
+      { name: "SQLite", url: "https://www.sqlite.org/" },
+      { name: "MongoDB", url: "https://www.mongodb.com/" },
+      { name: "Supabase", url: "https://supabase.com/" },
+      { name: "Firebase", url: "https://firebase.google.com/" },
     ],
   },
   {
