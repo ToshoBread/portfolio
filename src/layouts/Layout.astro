@@ -1,20 +1,42 @@
 ---
 import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
+import { skillGroups } from '../data/skills';
 
-interface Props {
-  title: string;
-  description?: string;
-  image?: string;
-}
+const pageTitle = "Zion Nathan Dionisio | IT Student"
+const pageDescription = 'IT Student Portfolio | Writing code for anything that runs'
 
-const {
-  title,
-  description = 'IT Student Portfolio | Writing code for anything that runs',
-  image = '/og-image.png',
-} = Astro.props;
+const shareImage = '/og-image.png'
+const shareContent = new URL(shareImage, Astro.url.href)
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const siteURL = Astro.site?.href ?? "https://zndionisio.pages.dev";
+const canonicalURL = new URL(Astro.url.pathname, siteURL);
+
+const technicalSkills = skillGroups
+  .filter((group) => group.title !== "Communication")
+  .flatMap((g) => g.skills.map((s) => s.name));
+
+const languages = skillGroups
+  .find((group) => group.title === "Communication")
+  ?.skills.map((skill) => skill.bcp47).filter(Boolean) ?? [];
+
+const jsonLD = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Zion Nathan Dionisio",
+  "url": siteURL,
+  "jobTitle": "IT Student",
+  "description": pageDescription,
+  "image": shareContent.href,
+  "sameAs": [
+    "https://github.com/ToshoBread",
+    "https://www.linkedin.com/in/zndionisio/"
+  ],
+  "knowsAbout": ["Web Development", "Software Engineering", "Information Technology"],
+  "skills": technicalSkills,
+  "knowsLanguage": languages,
+  "email": "zndionisio.2121@gmail.com"
+});
 ---
 
 <!doctype html>
@@ -22,27 +44,30 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content={description} />
+    <meta name="description" content={pageDescription} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonicalURL} />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={Astro.url.href} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL(image, Astro.url.href)} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:image" content={shareContent} />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={new URL(image, Astro.url.href)} />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+    <meta name="twitter:image" content={shareContent} />
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json" is:inline set:html={jsonLD} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-    <title>{title}</title>
+    <title>{pageTitle}</title>
   </head>
   <body class="min-h-screen antialiased">
     <Navigation />

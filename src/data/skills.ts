@@ -1,6 +1,7 @@
 export interface Skill {
   name: string;
   url?: string;
+  bcp47?: string;
 }
 
 export interface SkillGroupData {
@@ -48,9 +49,9 @@ export const skillGroups: SkillGroupData[] = [
     title: "Communication",
     accent: "gold",
     skills: [
-      { name: "Filipino" },
-      { name: "English" },
-      { name: "Filipino Sign Language (Intermediate)" },
+      { name: "Filipino", bcp47: "fil" },
+      { name: "English", bcp47: "en" },
+      { name: "Filipino Sign Language (Intermediate)", bcp47: "fsl" },
     ],
   },
 ];
