@@ -32,6 +32,8 @@ export const skillGroups: SkillGroupData[] = [
       { name: "Vue", url: "https://vuejs.org/" },
       { name: "Astro", url: "https://astro.build/" },
       { name: "Tailwind CSS", url: "https://tailwindcss.com/" },
+      { name: "Bootstrap CSS", url: "https://getbootstrap.com/" },
+      { name: "Pico CSS", url: "https://picocss.com/" },
       { name: "Node.js", url: "https://nodejs.org/" },
       { name: "Express", url: "https://expressjs.com/" },
     ],
@@ -45,7 +47,6 @@ export const skillGroups: SkillGroupData[] = [
       { name: "SQLite", url: "https://www.sqlite.org/" },
       { name: "MongoDB", url: "https://www.mongodb.com/" },
       { name: "Supabase", url: "https://supabase.com/" },
-      { name: "Firebase", url: "https://firebase.google.com/" },
     ],
   },
   {

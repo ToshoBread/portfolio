@@ -1,5 +1,5 @@
 ---
-import PlayIcon from './icons/PlayIcon.astro';
+import ExternalLinkIcon from './icons/ExternalLinkIcon.astro';
 import GitHubIcon from './icons/GitHubIcon.astro';
 
 interface Props {
@@ -29,7 +29,7 @@ const { title, description, tags, repo, live } = Astro.props;
         class="text-rosepine-subtle hover:text-rosepine-light transition-colors"
         onclick="event.stopPropagation()"
       >
-        <PlayIcon />
+        <ExternalLinkIcon />
       </a>
     )}
     <a
