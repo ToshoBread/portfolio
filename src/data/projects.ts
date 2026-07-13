@@ -2,18 +2,11 @@ export interface Project {
   title: string;
   description: string;
   tags: string[];
-  repo: string;
+  repo?: string;
   live?: string;
 }
 
 export const projects: Project[] = [
-  {
-    title: "Portfolio",
-    description: "You're looking at it.",
-    tags: ["Typescript", "Astro", "Tailwind CSS"],
-    repo: "https://github.com/ToshoBread/portfolio",
-    live: "#top",
-  },
   {
     title: "Filtered Feels",
     description:
@@ -25,8 +18,15 @@ export const projects: Project[] = [
   {
     title: "B-Sync",
     description:
-      "Barangay Information Management System. Records, residents, and requests for a local government unit. Built as coursework, but my first actual system using Laravel.",
+      "Barangay Information Management System. Manage records, residents, and documents for a local government unit. Built as coursework, but my first actual system using Laravel.",
     tags: ["Laravel", "Bootstrap CSS", "PostgreSQL"],
     repo: "https://github.com/ToshoBread/B-Sync",
+  },
+  {
+    title: "Portfolio",
+    description: "You're looking at it.",
+    tags: ["Typescript", "Astro", "Tailwind CSS"],
+    repo: "https://github.com/ToshoBread/portfolio",
+    live: "#top",
   },
 ];
