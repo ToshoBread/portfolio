@@ -1,52 +1,147 @@
 ---
 import ExternalLinkIcon from './icons/ExternalLinkIcon.astro';
 import GitHubIcon from './icons/GitHubIcon.astro';
+import CarouselPrevIcon from './icons/CarouselPrevIcon.astro';
+import CarouselNextIcon from './icons/CarouselNextIcon.astro';
 
 interface Props {
   title: string;
   description: string;
   tags: string[];
-  repo: string;
+  repo?: string;
   live?: string;
+  images?: string[];
 }
 
-const { title, description, tags, repo, live } = Astro.props;
+const { title, description, tags, repo, live, images = [] } = Astro.props;
+const hasImages = images.length > 0;
 ---
 
-<div
-  class:list={[
-    'group bg-rosepine-surface rounded-2xl p-8 hover:bg-rosepine-overlay transition-all relative',
-    live && 'cursor-pointer',
-  ]}
-  {...live && { onclick: `window.open('${live}', '_blank')` }}
->
-  <div class="absolute top-8 right-8 flex gap-3">
-    {live && (
-      <a
-        href={live}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="text-rosepine-subtle hover:text-rosepine-light transition-colors"
-        onclick="event.stopPropagation()"
+<div class:list={['group bg-rosepine-surface rounded-2xl overflow-hidden hover:bg-rosepine-overlay transition-all flex flex-col', hasImages && 'md:flex-row']}>
+  {hasImages && (
+    <div class="w-full md:w-2/5 min-h-[200px] md:min-h-0 flex-shrink-0 relative">
+      <div class="carousel-container relative w-full h-full overflow-hidden">
+        {images.map((src, i) => (
+          <img
+            src={src}
+            alt={`${title} screenshot ${i + 1}`}
+            class:list={[
+              'absolute inset-0 w-full h-full object-cover transition-opacity duration-300',
+              i === 0 ? 'opacity-100' : 'opacity-0',
+            ]}
+            data-carousel={`${title}-${i}`}
+            data-images={JSON.stringify(images)}
+            data-title={title}
+          />
+        ))}
+      </div>
+      <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+        {images.map((_, i) => (
+          <button
+            class:list={[
+              'w-2 h-2 rounded-full transition-colors',
+              i === 0 ? 'bg-rosepine-light' : 'bg-rosepine-subtle/40',
+            ]}
+            data-dot={`${title}-${i}`}
+            aria-label={`Image ${i + 1}`}
+          />
+        ))}
+      </div>
+      <button
+        class="absolute left-2 top-1/2 -translate-y-1/2 w-7 h-7 flex items-center justify-center rounded-full bg-rosepine-base/60 text-rosepine-subtle hover:text-rosepine-light opacity-0 group-hover:opacity-100 transition-opacity z-10"
+        data-prev={title}
+        aria-label="Previous image"
       >
-        <ExternalLinkIcon />
-      </a>
-    )}
-    <a
-      href={repo}
-      target="_blank"
-      rel="noopener noreferrer"
-      class="text-rosepine-subtle hover:text-rosepine-light transition-colors"
-      onclick="event.stopPropagation()"
-    >
-      <GitHubIcon />
-    </a>
-  </div>
-  <h3 class="text-xl font-semibold text-rosepine-light mb-3 font-body">{title}</h3>
-  <p class="text-rosepine-subtle text-sm leading-relaxed mb-6 font-body">{description}</p>
-  <div class="flex flex-wrap gap-2">
-    {tags.map((tag) => (
-      <span class="text-xs font-mono px-2 py-1 bg-rosepine-base text-rosepine-iris rounded">{tag}</span>
-    ))}
+        <CarouselPrevIcon />
+      </button>
+      <button
+        class="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 flex items-center justify-center rounded-full bg-rosepine-base/60 text-rosepine-subtle hover:text-rosepine-light opacity-0 group-hover:opacity-100 transition-opacity z-10"
+        data-next={title}
+        aria-label="Next image"
+      >
+        <CarouselNextIcon />
+      </button>
+    </div>
+  )}
+  <div class="relative p-8 flex flex-col justify-center flex-1 min-w-0">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-xl font-semibold text-rosepine-light font-body">{title}</h3>
+      <div class="flex gap-3 flex-shrink-0" data-stop-propagation>
+        {live && (
+          <a
+            href={live}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-rosepine-subtle hover:text-rosepine-light transition-colors"
+          >
+            <ExternalLinkIcon />
+          </a>
+        )}
+        <a
+          href={repo}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-rosepine-subtle hover:text-rosepine-light transition-colors"
+        >
+          <GitHubIcon />
+        </a>
+      </div>
+    </div>
+    <p class="text-rosepine-subtle text-sm leading-relaxed mb-6 font-body line-clamp-3">{description}</p>
+    <div class="flex flex-wrap gap-2">
+      {tags.map((tag) => (
+        <span class="text-xs font-mono px-2 py-1 bg-rosepine-base text-rosepine-iris rounded">{tag}</span>
+      ))}
+    </div>
   </div>
 </div>
+
+<script>
+  function initCarousels() {
+    document.querySelectorAll('[data-stop-propagation]').forEach((el) => {
+      el.addEventListener('click', (e) => e.stopPropagation());
+    });
+
+    document.querySelectorAll('.carousel-container').forEach((container) => {
+      const slides = container.querySelectorAll('[data-carousel]');
+      if (slides.length === 0) return;
+
+      const prefix = slides[0]?.getAttribute('data-carousel')?.replace(/-\d+$/, '') ?? '';
+      let current = 0;
+
+      const dots = document.querySelectorAll(`[data-dot^="${prefix}-"]`);
+      const prevBtn = document.querySelector(`[data-prev="${prefix}"]`);
+      const nextBtn = document.querySelector(`[data-next="${prefix}"]`);
+
+      function show(index: number) {
+        slides.forEach((s, i) => s.classList.toggle('opacity-100', i === index));
+        slides.forEach((s, i) => s.classList.toggle('opacity-0', i !== index));
+        dots.forEach((d, i) => d.classList.toggle('bg-rosepine-light', i === index));
+        dots.forEach((d, i) => d.classList.toggle('bg-rosepine-subtle/40', i !== index));
+        current = index;
+      }
+
+      slides.forEach((slide) => {
+        slide.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const images = JSON.parse(slide.getAttribute('data-images') || '[]');
+          const title = slide.getAttribute('data-title') || '';
+          document.dispatchEvent(
+            new CustomEvent('lightbox-open', { detail: { images, title, current } })
+          );
+        });
+        (slide as HTMLElement).style.cursor = 'zoom-in';
+      });
+
+      prevBtn?.addEventListener('click', (e) => { e.stopPropagation(); show((current - 1 + slides.length) % slides.length); });
+      nextBtn?.addEventListener('click', (e) => { e.stopPropagation(); show((current + 1) % slides.length); });
+      dots.forEach((dot, i) => dot.addEventListener('click', (e) => { e.stopPropagation(); show(i); }));
+
+      document.addEventListener('lightbox-index-change', ((e: CustomEvent) => {
+        if (e.detail.title === prefix) show(e.detail.index);
+      }) as EventListener);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', initCarousels);
+</script>

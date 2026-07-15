@@ -3,5 +3,6 @@ docs/
 AGENTS.md
 *opencode*
 .superpowers/
+prototype/
 .astro/
 dist/

@@ -1,6 +1,7 @@
 ---
 import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
+import Lightbox from '../components/Lightbox.astro';
 import { skillGroups } from '../data/skills';
 
 const pageTitle = "Zion Nathan Dionisio | IT Student"
@@ -67,11 +68,14 @@ const jsonLD = JSON.stringify({
     <title>{pageTitle}</title>
   </head>
   <body class="min-h-screen antialiased font-sans">
-    <Navigation />
-    <main class="pt-16">
-      <slot />
-    </main>
-    <Footer />
+    <div id="page-content">
+      <Navigation />
+      <main class="pt-16">
+        <slot />
+      </main>
+      <Footer />
+    </div>
+    <Lightbox />
   </body>
 </html>
 
