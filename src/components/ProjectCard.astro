@@ -1,8 +1,7 @@
 ---
 import ExternalLinkIcon from './icons/ExternalLinkIcon.astro';
 import GitHubIcon from './icons/GitHubIcon.astro';
-import CarouselPrevIcon from './icons/CarouselPrevIcon.astro';
-import CarouselNextIcon from './icons/CarouselNextIcon.astro';
+import CarouselButton from './CarouselButton.astro';
 
 interface Props {
   title: string;
@@ -17,10 +16,17 @@ const { title, description, tags, repo, live, images = [] } = Astro.props;
 const hasImages = images.length > 0;
 ---
 
-<div class:list={['group bg-rosepine-surface rounded-2xl overflow-hidden hover:bg-rosepine-overlay transition-all flex flex-col', hasImages && 'md:flex-row']}>
+<div class:list={['group bg-rosepine-surface rounded-2xl overflow-hidden hover:bg-rosepine-overlay focus-within:bg-rosepine-overlay transition-all flex flex-col', hasImages && 'md:flex-row']}>
   {hasImages && (
     <div class="w-full md:w-2/5 min-h-[200px] md:min-h-0 flex-shrink-0 relative">
-      <div class="carousel-container relative w-full h-full overflow-hidden">
+      <div
+        class="carousel-container relative w-full h-full overflow-hidden rounded-2xl cursor-zoom-in focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rosepine-rose focus-visible:ring-offset-2 focus-visible:ring-offset-rosepine-base"
+        tabindex="0"
+        role="button"
+        aria-label={`View ${title} screenshots`}
+        data-images={JSON.stringify(images)}
+        data-title={title}
+      >
         {images.map((src, i) => (
           <img
             src={src}
@@ -30,14 +36,15 @@ const hasImages = images.length > 0;
               i === 0 ? 'opacity-100' : 'opacity-0',
             ]}
             data-carousel={`${title}-${i}`}
-            data-images={JSON.stringify(images)}
-            data-title={title}
           />
         ))}
       </div>
-      <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+      <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10" role="tablist" aria-label={`${title} slides`}>
         {images.map((_, i) => (
           <button
+            tabindex="-1"
+            role="tab"
+            aria-selected={i === 0}
             class:list={[
               'w-2 h-2 rounded-full transition-colors',
               i === 0 ? 'bg-rosepine-light' : 'bg-rosepine-subtle/40',
@@ -47,20 +54,8 @@ const hasImages = images.length > 0;
           />
         ))}
       </div>
-      <button
-        class="absolute left-2 top-1/2 -translate-y-1/2 w-7 h-7 flex items-center justify-center rounded-full bg-rosepine-base/60 text-rosepine-subtle hover:text-rosepine-light opacity-0 group-hover:opacity-100 transition-opacity z-10"
-        data-prev={title}
-        aria-label="Previous image"
-      >
-        <CarouselPrevIcon />
-      </button>
-      <button
-        class="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 flex items-center justify-center rounded-full bg-rosepine-base/60 text-rosepine-subtle hover:text-rosepine-light opacity-0 group-hover:opacity-100 transition-opacity z-10"
-        data-next={title}
-        aria-label="Next image"
-      >
-        <CarouselNextIcon />
-      </button>
+      <CarouselButton direction="left" variant="card" data-prev={title} />
+      <CarouselButton direction="right" variant="card" data-next={title} />
     </div>
   )}
   <div class="relative p-8 flex flex-col justify-center flex-1 min-w-0">
@@ -103,6 +98,7 @@ const hasImages = images.length > 0;
     });
 
     document.querySelectorAll('.carousel-container').forEach((container) => {
+      const el = container as HTMLElement;
       const slides = container.querySelectorAll('[data-carousel]');
       if (slides.length === 0) return;
 
@@ -116,22 +112,47 @@ const hasImages = images.length > 0;
       function show(index: number) {
         slides.forEach((s, i) => s.classList.toggle('opacity-100', i === index));
         slides.forEach((s, i) => s.classList.toggle('opacity-0', i !== index));
-        dots.forEach((d, i) => d.classList.toggle('bg-rosepine-light', i === index));
-        dots.forEach((d, i) => d.classList.toggle('bg-rosepine-subtle/40', i !== index));
+        dots.forEach((d, i) => {
+          d.classList.toggle('bg-rosepine-light', i === index);
+          d.classList.toggle('bg-rosepine-subtle/40', i !== index);
+          d.setAttribute('aria-selected', String(i === index));
+        });
         current = index;
       }
 
-      slides.forEach((slide) => {
-        slide.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const images = JSON.parse(slide.getAttribute('data-images') || '[]');
-          const title = slide.getAttribute('data-title') || '';
-          document.dispatchEvent(
-            new CustomEvent('lightbox-open', { detail: { images, title, current } })
-          );
-        });
-        (slide as HTMLElement).style.cursor = 'zoom-in';
+      function openLightbox() {
+        const images = JSON.parse(el.getAttribute('data-images') || '[]');
+        const title = el.getAttribute('data-title') || '';
+        document.dispatchEvent(
+          new CustomEvent('lightbox-open', { detail: { images, title, current } })
+        );
+      }
+
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openLightbox();
       });
+
+      el.addEventListener('keydown', ((e: KeyboardEvent) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          e.stopPropagation();
+          openLightbox();
+          return;
+        }
+        if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          e.stopPropagation();
+          show((current - 1 + slides.length) % slides.length);
+          return;
+        }
+        if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          e.stopPropagation();
+          show((current + 1) % slides.length);
+          return;
+        }
+      }) as EventListener);
 
       prevBtn?.addEventListener('click', (e) => { e.stopPropagation(); show((current - 1 + slides.length) % slides.length); });
       nextBtn?.addEventListener('click', (e) => { e.stopPropagation(); show((current + 1) % slides.length); });

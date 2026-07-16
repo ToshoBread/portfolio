@@ -1,6 +1,5 @@
 ---
-import CarouselPrevIcon from './icons/CarouselPrevIcon.astro';
-import CarouselNextIcon from './icons/CarouselNextIcon.astro';
+import CarouselButton from './CarouselButton.astro';
 ---
 
 <div
@@ -18,28 +17,18 @@ import CarouselNextIcon from './icons/CarouselNextIcon.astro';
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12" /></svg>
   </button>
   <div class="relative w-full h-full flex items-center justify-center p-8 md:p-16" id="lightbox-backdrop">
-    <img
-      id="lightbox-img"
-      src=""
-      alt=""
-      class="max-w-[85vw] max-h-[85vh] object-contain rounded-lg transition-opacity duration-200"
-    />
+    <div class="flex flex-col items-center">
+      <img
+        id="lightbox-img"
+        src=""
+        alt=""
+        class="max-w-[85vw] max-h-[80vh] object-contain rounded-lg transition-opacity duration-200"
+      />
+      <div class="flex gap-2 mt-4" id="lightbox-dots"></div>
+    </div>
   </div>
-  <button
-    class="absolute left-3 md:left-8 top-1/2 -translate-y-1/2 w-12 h-12 md:w-14 md:h-14 flex items-center justify-center rounded-full bg-rosepine-surface text-rosepine-light hover:text-rosepine-rose transition-colors z-10"
-    id="lightbox-prev"
-    aria-label="Previous"
-  >
-    <CarouselPrevIcon />
-  </button>
-  <button
-    class="absolute right-3 md:right-8 top-1/2 -translate-y-1/2 w-12 h-12 md:w-14 md:h-14 flex items-center justify-center rounded-full bg-rosepine-surface text-rosepine-light hover:text-rosepine-rose transition-colors z-10"
-    id="lightbox-next"
-    aria-label="Next"
-  >
-    <CarouselNextIcon />
-  </button>
-  <div class="absolute bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10" id="lightbox-dots"></div>
+  <CarouselButton direction="left" variant="lightbox" id="lightbox-prev" />
+  <CarouselButton direction="right" variant="lightbox" id="lightbox-next" />
   <div class="absolute bottom-4 md:bottom-6 right-4 md:right-6 text-rosepine-subtle font-mono text-xs z-10">
     <span id="lightbox-counter"></span>
   </div>
@@ -63,10 +52,12 @@ import CarouselNextIcon from './icons/CarouselNextIcon.astro';
   let state: LightboxState = { images: [], title: '', current: 0 };
 
   function renderDots() {
+    lightboxDots.setAttribute('role', 'tablist');
+    lightboxDots.setAttribute('aria-label', `${state.title} slides`);
     lightboxDots.innerHTML = state.images
       .map(
         (_, i) =>
-          `<button class="w-2 h-2 rounded-full transition-colors ${
+          `<button tabindex="-1" role="tab" aria-selected="${i === state.current}" class="w-2 h-2 rounded-full transition-colors ${
             i === state.current ? 'bg-rosepine-light' : 'bg-rosepine-subtle/40'
           }" data-lightbox-dot="${i}" aria-label="Image ${i + 1}"></button>`
       )
@@ -89,6 +80,7 @@ import CarouselNextIcon from './icons/CarouselNextIcon.astro';
     lightboxDots.querySelectorAll('button').forEach((dot, i) => {
       dot.classList.toggle('bg-rosepine-light', i === index);
       dot.classList.toggle('bg-rosepine-subtle/40', i !== index);
+      dot.setAttribute('aria-selected', String(i === index));
     });
 
     document.dispatchEvent(
@@ -97,8 +89,10 @@ import CarouselNextIcon from './icons/CarouselNextIcon.astro';
   }
 
   const pageContent = document.getElementById('page-content');
+  let previousFocus: HTMLElement | null = null;
 
   function open(images: string[], title: string, startIndex: number) {
+    previousFocus = document.activeElement as HTMLElement;
     state = { images, title, current: startIndex };
     renderDots();
     show(startIndex);
@@ -113,6 +107,8 @@ import CarouselNextIcon from './icons/CarouselNextIcon.astro';
     lightbox.classList.remove('flex');
     document.body.style.overflow = '';
     if (pageContent) pageContent.inert = false;
+    previousFocus?.focus();
+    previousFocus = null;
   }
 
   closeBtn.addEventListener('click', close);
@@ -135,6 +131,24 @@ import CarouselNextIcon from './icons/CarouselNextIcon.astro';
     if (e.key === 'Escape') { close(); return; }
     if (e.key === 'ArrowLeft') { show((state.current - 1 + state.images.length) % state.images.length); return; }
     if (e.key === 'ArrowRight') { show((state.current + 1) % state.images.length); return; }
+  });
+
+  let touchStartX = 0;
+  const SWIPE_THRESHOLD = 50;
+
+  lightbox.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].clientX;
+  }, { passive: true });
+
+  lightbox.addEventListener('touchend', (e) => {
+    const touchEndX = e.changedTouches[0].clientX;
+    const diff = touchStartX - touchEndX;
+    if (Math.abs(diff) < SWIPE_THRESHOLD) return;
+    if (diff > 0) {
+      show((state.current + 1) % state.images.length);
+    } else {
+      show((state.current - 1 + state.images.length) % state.images.length);
+    }
   });
 
   document.addEventListener('lightbox-open', ((e: CustomEvent) => {
