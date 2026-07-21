@@ -36,6 +36,7 @@ export const skillGroups: SkillGroupData[] = [
       { name: "Pico CSS", url: "https://picocss.com/" },
       { name: "Node.js", url: "https://nodejs.org/" },
       { name: "Express", url: "https://expressjs.com/" },
+      { name: "Laravel", url: "https://laravel.com/" },
     ],
   },
   {
