@@ -4,13 +4,13 @@ import CarouselButton from './CarouselButton.astro';
 
 <div
   id="global-lightbox"
-  class="fixed inset-0 bg-rosepine-base/95 z-[100] hidden items-center justify-center p-4 md:p-8"
+  class="fixed inset-0 bg-rosepine-base/95 z-[100] items-center justify-center p-4 md:p-8 opacity-0 pointer-events-none transition-opacity duration-200"
   role="dialog"
   aria-modal="true"
   tabindex="-1"
 >
   <button
-    class="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 flex items-center justify-center rounded-full bg-rosepine-surface text-rosepine-light hover:text-rosepine-rose transition-colors z-10"
+    class="absolute top-4 right-4 md:top-6 md:right-6 w-11 h-11 flex items-center justify-center rounded-full bg-rosepine-surface text-rosepine-light hover:text-rosepine-rose transition-colors z-10"
     id="lightbox-close"
     aria-label="Close"
   >
@@ -96,15 +96,21 @@ import CarouselButton from './CarouselButton.astro';
     state = { images, title, current: startIndex };
     renderDots();
     show(startIndex);
-    lightbox.classList.remove('hidden');
-    lightbox.classList.add('flex');
+    lightbox.style.display = 'flex';
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        lightbox.classList.remove('opacity-0', 'pointer-events-none');
+      });
+    });
     document.body.style.overflow = 'hidden';
     if (pageContent) pageContent.inert = true;
   }
 
   function close() {
-    lightbox.classList.add('hidden');
-    lightbox.classList.remove('flex');
+    lightbox.classList.add('opacity-0', 'pointer-events-none');
+    setTimeout(() => {
+      lightbox.style.display = '';
+    }, 200);
     document.body.style.overflow = '';
     if (pageContent) pageContent.inert = false;
     previousFocus?.focus();
@@ -127,7 +133,7 @@ import CarouselButton from './CarouselButton.astro';
   });
 
   document.addEventListener('keydown', (e) => {
-    if (lightbox.classList.contains('hidden')) return;
+    if (lightbox.classList.contains('opacity-0')) return;
     if (e.key === 'Escape') { close(); return; }
     if (e.key === 'ArrowLeft') { show((state.current - 1 + state.images.length) % state.images.length); return; }
     if (e.key === 'ArrowRight') { show((state.current + 1) % state.images.length); return; }

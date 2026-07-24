@@ -9,7 +9,7 @@ export default {
           surface: '#1f1d2e',
           overlay: '#26233a',
           light: '#e0def4',
-          subtle: '#908caa',
+          subtle: '#a09aaa',
           rose: '#eb6f92',
           gold: '#f6c177',
           pine: '#31748f',

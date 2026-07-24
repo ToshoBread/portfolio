@@ -49,6 +49,10 @@ const jsonLD = JSON.stringify({
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonicalURL} />
 
+    <!-- Preload critical fonts -->
+    <link rel="preload" href="/_astro/sora-latin-wght-normal.DdqRvwsR.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/_astro/space-grotesk-latin-wght-normal.BhU9QXUp.woff2" as="font" type="font/woff2" crossorigin />
+
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={Astro.url.href} />
@@ -70,7 +74,7 @@ const jsonLD = JSON.stringify({
   <body class="min-h-screen antialiased font-sans">
     <div id="page-content">
       <Navigation />
-      <main class="pt-16">
+      <main id="main-content" class="pt-16">
         <slot />
       </main>
       <Footer />
@@ -88,8 +92,45 @@ const jsonLD = JSON.stringify({
         }
       });
     },
-    { threshold: 0.1 }
+    { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
   );
 
   document.querySelectorAll('.fade-in').forEach((el) => observer.observe(el));
+
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+  const navHeight = 64;
+
+  let ticking = false;
+  function updateScrollspy() {
+    let activeId = '';
+
+    sections.forEach((section) => {
+      const rect = section.getBoundingClientRect();
+      if (rect.top <= navHeight + 100 && rect.bottom > navHeight) {
+        const id = section.getAttribute('id');
+        const link = document.querySelector(`.nav-link[href="#${id}"]`);
+        if (link && id) activeId = id;
+      }
+    });
+
+    navLinks.forEach((link) => {
+      const href = link.getAttribute('href');
+      if (href === `#${activeId}`) {
+        link.classList.add('text-rosepine-light');
+        link.classList.remove('text-rosepine-subtle');
+      } else {
+        link.classList.remove('text-rosepine-light');
+        link.classList.add('text-rosepine-subtle');
+      }
+    });
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(updateScrollspy);
+      ticking = true;
+    }
+  });
 </script>
