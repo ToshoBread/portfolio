@@ -71,7 +71,7 @@ const jsonLD = JSON.stringify({
 
     <title>{pageTitle}</title>
   </head>
-  <body class="min-h-screen antialiased font-sans">
+  <body class="min-h-screen antialiased font-sans bg-rosepine-base text-rosepine-foreground">
     <div id="page-content">
       <Navigation />
       <main id="main-content" class="pt-16">
@@ -117,10 +117,10 @@ const jsonLD = JSON.stringify({
     navLinks.forEach((link) => {
       const href = link.getAttribute('href');
       if (href === `#${activeId}`) {
-        link.classList.add('text-rosepine-light');
+        link.classList.add('text-rosepine-foreground');
         link.classList.remove('text-rosepine-subtle');
       } else {
-        link.classList.remove('text-rosepine-light');
+        link.classList.remove('text-rosepine-foreground');
         link.classList.add('text-rosepine-subtle');
       }
     });

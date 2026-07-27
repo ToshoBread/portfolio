@@ -1,7 +1,9 @@
 ---
+import { Image } from 'astro:assets';
 import ExternalLinkIcon from './icons/ExternalLinkIcon.astro';
 import GitHubIcon from './icons/GitHubIcon.astro';
 import CarouselButton from './CarouselButton.astro';
+import type { ImageMetadata } from 'astro';
 
 interface Props {
   title: string;
@@ -9,7 +11,7 @@ interface Props {
   tags: string[];
   repo?: string;
   live?: string;
-  images?: string[];
+  images?: ImageMetadata[];
 }
 
 const { title, description, tags, repo, live, images = [] } = Astro.props;
@@ -20,23 +22,24 @@ const hasImages = images.length > 0;
   {hasImages && (
     <div class="w-full md:w-2/5 min-h-[200px] md:min-h-0 flex-shrink-0 relative">
       <div
-        class="carousel-container relative w-full h-full overflow-hidden rounded-2xl cursor-zoom-in focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rosepine-rose focus-visible:ring-offset-2 focus-visible:ring-offset-rosepine-base"
+        class="carousel-container relative w-full h-full overflow-hidden rounded-2xl cursor-zoom-in focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rosepine-love focus-visible:ring-offset-2 focus-visible:ring-offset-rosepine-base"
         tabindex="0"
         role="button"
         aria-label={`View ${title} screenshots`}
-        data-images={JSON.stringify(images)}
+        data-images={JSON.stringify(images.map(img => img.src))}
         data-title={title}
       >
-        {images.map((src, i) => (
-          <img
-            src={src}
+        {images.map((img, i) => (
+          <Image
+            src={img}
             alt={`${title} screenshot ${i + 1}`}
+            widths={[400, 800]}
+            sizes="(max-width: 768px) 100vw, 20vw"
             class:list={[
               'absolute inset-0 w-full h-full object-cover transition-opacity duration-300',
               i === 0 ? 'opacity-100' : 'opacity-0',
             ]}
             data-carousel={`${title}-${i}`}
-            loading="lazy"
           />
         ))}
       </div>
@@ -48,7 +51,7 @@ const hasImages = images.length > 0;
             aria-selected={i === 0}
             class:list={[
               'w-2 h-2 rounded-full transition-colors',
-              i === 0 ? 'bg-rosepine-light' : 'bg-rosepine-subtle/40',
+              i === 0 ? 'bg-rosepine-foreground' : 'bg-rosepine-subtle/40',
             ]}
             data-dot={`${title}-${i}`}
             aria-label={`Image ${i + 1}`}
@@ -61,14 +64,14 @@ const hasImages = images.length > 0;
   )}
   <div class="relative p-8 flex flex-col justify-center flex-1 min-w-0">
     <div class="flex items-center justify-between mb-3">
-      <h3 class="text-xl font-semibold text-rosepine-light font-body">{title}</h3>
+      <h3 class="text-xl font-semibold text-rosepine-foreground font-body">{title}</h3>
       <div class="flex gap-3 flex-shrink-0" data-stop-propagation>
         {live && (
           <a
             href={live}
             target="_blank"
             rel="noopener noreferrer"
-            class="text-rosepine-subtle hover:text-rosepine-light transition-colors"
+            class="text-rosepine-subtle hover:text-rosepine-foreground transition-colors"
           >
             <ExternalLinkIcon />
           </a>
@@ -77,7 +80,7 @@ const hasImages = images.length > 0;
           href={repo}
           target="_blank"
           rel="noopener noreferrer"
-          class="text-rosepine-subtle hover:text-rosepine-light transition-colors"
+          class="text-rosepine-subtle hover:text-rosepine-foreground transition-colors"
         >
           <GitHubIcon />
         </a>
@@ -114,7 +117,7 @@ const hasImages = images.length > 0;
         slides.forEach((s, i) => s.classList.toggle('opacity-100', i === index));
         slides.forEach((s, i) => s.classList.toggle('opacity-0', i !== index));
         dots.forEach((d, i) => {
-          d.classList.toggle('bg-rosepine-light', i === index);
+          d.classList.toggle('bg-rosepine-foreground', i === index);
           d.classList.toggle('bg-rosepine-subtle/40', i !== index);
           d.setAttribute('aria-selected', String(i === index));
         });

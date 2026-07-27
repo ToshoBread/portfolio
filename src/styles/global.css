@@ -12,9 +12,6 @@
   html {
     scroll-behavior: smooth;
   }
-  body {
-    @apply bg-rosepine-base text-rosepine-light;
-  }
   :focus-visible {
     outline: 2px solid theme('colors.rosepine.iris');
     outline-offset: 2px;
@@ -43,5 +40,17 @@
   .fade-in.visible {
     opacity: 1;
     transform: translateY(0);
+  }
+
+  .animate-shake {
+    animation: shake 0.4s ease-in-out;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(6px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
   }
 }

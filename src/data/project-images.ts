@@ -5,7 +5,7 @@ import bsyncLogin from "../images/projects/b-sync/bsync_login.png";
 import bsyncDashboard from "../images/projects/b-sync/bsync_dashboard.png";
 import bsyncHousehold from "../images/projects/b-sync/bsync_householdmgmt.png";
 
-export const projectImages: Record<string, string[]> = {
-  filteredFeels: [filteredFeelsNewPost.src, filteredFeelsAbout.src, filteredFeelsPosts.src],
-  bSync: [bsyncLogin.src, bsyncDashboard.src, bsyncHousehold.src],
+export const projectImages: Record<string, typeof filteredFeelsNewPost[]> = {
+  filteredFeels: [filteredFeelsNewPost, filteredFeelsAbout, filteredFeelsPosts],
+  bSync: [bsyncLogin, bsyncDashboard, bsyncHousehold],
 };

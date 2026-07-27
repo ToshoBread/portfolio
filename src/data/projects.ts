@@ -1,4 +1,5 @@
 import { projectImages } from "./project-images";
+import type { ImageMetadata } from 'astro';
 
 export interface Project {
   title: string;
@@ -6,7 +7,7 @@ export interface Project {
   tags: string[];
   repo?: string;
   live?: string;
-  images?: string[];
+  images?: ImageMetadata[];
 }
 
 export const projects: Project[] = [

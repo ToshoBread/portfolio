@@ -1,9 +1,19 @@
 ---
+import GitHubIcon from './icons/GitHubIcon.astro';
+import LinkedInIcon from './icons/LinkedInIcon.astro';
 const year = new Date().getFullYear();
 ---
 
 <footer class="py-8 px-4 border-t border-rosepine-overlay">
   <div class="container mx-auto max-w-5xl text-center">
+    <div class="flex justify-center gap-4 mb-3">
+      <a href="https://github.com/ToshoBread" target="_blank" rel="noopener noreferrer" class="text-rosepine-subtle hover:text-rosepine-foreground transition-colors" aria-label="GitHub">
+        <GitHubIcon class="w-5 h-5" />
+      </a>
+      <a href="https://www.linkedin.com/in/zndionisio/" target="_blank" rel="noopener noreferrer" class="text-rosepine-subtle hover:text-rosepine-pine transition-colors" aria-label="LinkedIn">
+        <LinkedInIcon class="w-5 h-5" />
+      </a>
+    </div>
     <p class="text-sm text-rosepine-subtle">
       © {year} Zion Nathan Dionisio
     </p>

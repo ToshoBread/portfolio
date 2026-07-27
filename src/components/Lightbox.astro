@@ -10,7 +10,7 @@ import CarouselButton from './CarouselButton.astro';
   tabindex="-1"
 >
   <button
-    class="absolute top-4 right-4 md:top-6 md:right-6 w-11 h-11 flex items-center justify-center rounded-full bg-rosepine-surface text-rosepine-light hover:text-rosepine-rose transition-colors z-10"
+    class="absolute top-4 right-4 md:top-6 md:right-6 w-11 h-11 flex items-center justify-center rounded-full bg-rosepine-surface text-rosepine-foreground hover:text-rosepine-love transition-colors z-10"
     id="lightbox-close"
     aria-label="Close"
   >
@@ -58,7 +58,7 @@ import CarouselButton from './CarouselButton.astro';
       .map(
         (_, i) =>
           `<button tabindex="-1" role="tab" aria-selected="${i === state.current}" class="w-2 h-2 rounded-full transition-colors ${
-            i === state.current ? 'bg-rosepine-light' : 'bg-rosepine-subtle/40'
+            i === state.current ? 'bg-rosepine-foreground' : 'bg-rosepine-subtle/40'
           }" data-lightbox-dot="${i}" aria-label="Image ${i + 1}"></button>`
       )
       .join('');
@@ -78,7 +78,7 @@ import CarouselButton from './CarouselButton.astro';
     lightboxCounter.textContent = `${index + 1} / ${state.images.length}`;
 
     lightboxDots.querySelectorAll('button').forEach((dot, i) => {
-      dot.classList.toggle('bg-rosepine-light', i === index);
+      dot.classList.toggle('bg-rosepine-foreground', i === index);
       dot.classList.toggle('bg-rosepine-subtle/40', i !== index);
       dot.setAttribute('aria-selected', String(i === index));
     });

@@ -1,37 +1,148 @@
 ---
-import GitHubIcon from './icons/GitHubIcon.astro';
-import LinkedInIcon from './icons/LinkedInIcon.astro';
-import MailIcon from './icons/MailIcon.astro';
 ---
 
-<section id="contact" class="fade-in min-h-screen px-8 md:px-16 lg:px-24 flex flex-col justify-center">
-  <div class="text-center">
-    <div class="inline-block px-3 py-1 bg-rosepine-pine/20 rounded-full mb-6">
-      <span class="text-rosepine-pine text-sm font-mono">let's collaborate</span>
+<section id="contact" class="fade-in min-h-screen px-8 py-24 md:px-16 lg:px-24 flex flex-col justify-center">
+  <div class="max-w-xl mx-auto w-full">
+    <div class="text-center mb-10">
+      <div class="inline-block px-3 py-1 bg-rosepine-pine/20 rounded-full mb-6">
+        <span class="text-rosepine-pine text-sm font-mono">let's collaborate</span>
+      </div>
+      <h2 class="text-4xl font-bold text-rosepine-foreground mb-6">
+        Got something interesting?
+      </h2>
+      <p class="text-rosepine-subtle font-body">
+        I'm up for a good conversation about code, projects,
+        or why neovim is better than emacs (it just is).
+      </p>
     </div>
-    <h2 class="text-4xl font-bold text-rosepine-light mb-6">
-      Got something interesting?
-    </h2>
-    <p class="text-rosepine-subtle mb-10 max-w-lg mx-auto font-body">
-      I'm up for a good conversation about code, projects,
-      or why neovim is better than emacs (it just is).
-    </p>
-    <a
-      href="mailto:zndionisio.2121@gmail.com"
-      class="inline-flex items-center gap-2 bg-rosepine-rose text-rosepine-base px-8 py-4 rounded-xl font-medium hover:opacity-90 transition-opacity text-lg"
+
+    <div id="contact-success" class="hidden text-center py-12">
+      <p class="text-rosepine-pine text-lg font-medium mb-2">message sent!</p>
+      <p class="text-rosepine-subtle text-sm">I'll get back to you soon.</p>
+    </div>
+
+    <form
+      id="contact-form"
+      action="https://formspree.io/f/xdaqyldp"
+      method="POST"
+      novalidate
+      class="space-y-4"
     >
-      <span>reach out</span>
-      <MailIcon class="w-5 h-5" />
-    </a>
-    <div class="mt-6 flex justify-center gap-4">
-      <a href="https://github.com/ToshoBread" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-3 bg-rosepine-surface text-rosepine-light px-6 py-3 rounded-xl font-medium hover:bg-rosepine-overlay transition-colors text-lg">
-        <GitHubIcon />
-        <span>github</span>
-      </a>
-      <a href="https://www.linkedin.com/in/zndionisio/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-3 bg-rosepine-surface text-rosepine-light px-6 py-3 rounded-xl font-medium hover:bg-rosepine-overlay transition-colors text-lg">
-        <LinkedInIcon />
-        <span>linkedin</span>
-      </a>
-    </div>
+      <div>
+        <label for="email" class="block text-sm font-mono text-rosepine-subtle mb-1.5">email</label>
+        <input
+          type="email"
+          name="email"
+          id="email"
+          placeholder="you@example.com"
+          class="w-full px-4 py-3 bg-rosepine-base border border-rosepine-overlay rounded-xl text-rosepine-foreground placeholder:text-rosepine-subtle/50 focus:outline-none focus:ring-2 focus:ring-rosepine-iris/50 focus:border-rosepine-iris transition-colors"
+        />
+        <p id="email-error" class="hidden text-rosepine-love text-xs mt-1"></p>
+      </div>
+      <div>
+        <label for="message" class="block text-sm font-mono text-rosepine-subtle mb-1.5">message</label>
+        <textarea
+          name="message"
+          id="message"
+          rows="5"
+          placeholder="tell me about your project..."
+          class="w-full px-4 py-3 bg-rosepine-base border border-rosepine-overlay rounded-xl text-rosepine-foreground placeholder:text-rosepine-subtle/50 focus:outline-none focus:ring-2 focus:ring-rosepine-iris/50 focus:border-rosepine-iris transition-colors resize-none"
+        ></textarea>
+        <p id="message-error" class="hidden text-rosepine-love text-xs mt-1"></p>
+      </div>
+      <button
+        type="submit"
+        class="w-full bg-rosepine-love text-rosepine-base px-8 py-3.5 rounded-xl font-medium hover:opacity-90 transition-opacity text-lg cursor-pointer"
+      >
+        send message
+      </button>
+      <p id="contact-error" class="hidden text-rosepine-love text-sm text-center"></p>
+    </form>
+
   </div>
+  <script>
+    document.getElementById('contact-form')!.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const form = e.target as HTMLFormElement;
+      const btn = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+      const errorEl = document.getElementById('contact-error')!;
+      const emailError = document.getElementById('email-error')!;
+      const messageError = document.getElementById('message-error')!;
+      const emailInput = document.getElementById('email') as HTMLInputElement;
+      const messageInput = document.getElementById('message') as HTMLTextAreaElement;
+      const originalText = btn.textContent!;
+
+      emailError.classList.add('hidden');
+      messageError.classList.add('hidden');
+      emailInput.classList.remove('border-rosepine-love');
+      messageInput.classList.remove('border-rosepine-love');
+      errorEl.classList.add('hidden');
+      form.classList.remove('animate-shake');
+
+      let valid = true;
+
+      if (!emailInput.value.trim()) {
+        emailError.textContent = 'email is required.';
+        emailError.classList.remove('hidden');
+        emailInput.classList.add('border-rosepine-love');
+        valid = false;
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value)) {
+        emailError.textContent = 'please enter a valid email.';
+        emailError.classList.remove('hidden');
+        emailInput.classList.add('border-rosepine-love');
+        valid = false;
+      }
+
+      if (!messageInput.value.trim()) {
+        messageError.textContent = 'message is required.';
+        messageError.classList.remove('hidden');
+        messageInput.classList.add('border-rosepine-love');
+        valid = false;
+      }
+
+      if (!valid) {
+        form.classList.add('animate-shake');
+        return;
+      }
+
+      btn.textContent = 'sending...';
+      btn.disabled = true;
+
+      function showError(msg: string) {
+        errorEl.textContent = msg;
+        errorEl.classList.remove('hidden');
+        form.classList.add('animate-shake');
+        btn.textContent = originalText;
+        btn.disabled = false;
+      }
+
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' },
+        });
+
+        if (res.ok) {
+          form.classList.add('hidden');
+          document.getElementById('contact-success')!.classList.remove('hidden');
+          return;
+        }
+
+        if (res.status === 404) {
+          showError('form not found. let me know at zndionisio.2121@gmail.com');
+          return;
+        }
+
+        if (res.status === 429) {
+          showError('too many submissions. try again later.');
+          return;
+        }
+
+        showError('something went wrong. try again.');
+      } catch {
+        showError('failed to send message. check your internet?');
+      }
+    });
+  </script>
 </section>
