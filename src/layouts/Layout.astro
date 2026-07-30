@@ -69,6 +69,17 @@ const jsonLD = JSON.stringify({
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json" is:inline set:html={jsonLD} />
 
+    <!-- Theme initialization (prevents FOUC) -->
+    <script is:inline>
+      (function() {
+        var theme = localStorage.getItem('theme');
+        if (!theme) {
+          theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        }
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
+
     <title>{pageTitle}</title>
   </head>
   <body class="min-h-screen antialiased font-sans bg-rosepine-base text-rosepine-foreground">
