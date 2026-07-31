@@ -13,7 +13,7 @@ import { skillGroups } from '../data/skills';
         </div>
 
         <div class="grid lg:grid-cols-3 gap-12">
-            <div>
+            <div class="min-w-0">
                 <div class="relative aspect-square rounded-3xl overflow-hidden bg-rosepine-overlay theme-image-wrapper">
                     <div class="theme-image-dark">
                         <Image
@@ -43,7 +43,7 @@ import { skillGroups } from '../data/skills';
                 </div>
             </div>
 
-            <div class="space-y-6 text-rosepine-foreground leading-relaxed font-body">
+            <div class="space-y-6 text-rosepine-foreground leading-relaxed font-body min-w-0">
                 <p>
                     Hi! I'm the dev who will spend a few hours reading documentation after a coffee or two.
                 </p>
@@ -76,7 +76,7 @@ import { skillGroups } from '../data/skills';
                 </div>
             </div>
 
-            <div>
+            <div class="min-w-0">
                 {skillGroups.map((group) => (
                 <SkillGroup title={group.title} accent={group.accent} skills={group.skills} />
                 ))}
