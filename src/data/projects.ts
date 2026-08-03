@@ -1,5 +1,5 @@
 import { projectImages } from "./project-images";
-import type { ImageMetadata } from 'astro';
+import type { ImageMetadata } from "astro";
 
 export interface Project {
   title: string;
@@ -23,14 +23,15 @@ export const projects: Project[] = [
   {
     title: "B-Sync",
     description:
-      "Barangay Information Management System. Manage records, residents, and documents for a local government unit. Built as coursework, but my first actual system using Laravel.",
+      "Barangay Information Management System for managing records, residents, and documents. Built as coursework, first actual system with Laravel, PostgreSQL instead of MySQL because I wanted to learn it.",
     tags: ["Laravel", "Bootstrap CSS", "PostgreSQL"],
     repo: "https://github.com/ToshoBread/B-Sync",
     images: projectImages.bSync,
   },
   {
     title: "Portfolio",
-    description: "You're looking at it.",
+    description:
+      "You're looking at it. Astro for the first time (because I love component systems and static sites don't need a JS runtime), Tailwind because it just works, and Rose Pine because dark themes are non-negotiable.",
     tags: ["Typescript", "Astro", "Tailwind CSS"],
     repo: "https://github.com/ToshoBread/portfolio",
   },
