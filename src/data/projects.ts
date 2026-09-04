@@ -29,6 +29,14 @@ export const projects: Project[] = [
     images: projectImages.bSync,
   },
   {
+    title: "SakuraRecords",
+    description:
+      'Purchase Order and Sales Report Record System. Custom PWA for my mother to make her life easier. First time using Shadcn and asked myself "Why have I never used this before?"',
+    tags: ["Typescript", "Vue", "Tailwind CSS", "Supabase"],
+    repo: "https://github.com/ToshoBread/SakuraRecords",
+    images: projectImages.sakuraRecords,
+  },
+  {
     title: "Portfolio",
     description:
       "You're looking at it. Astro for the first time (because I love component systems and static sites don't need a JS runtime), Tailwind because it just works, and Rose Pine because dark themes are non-negotiable.",

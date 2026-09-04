@@ -15,7 +15,7 @@ export const skillGroups: SkillGroupData[] = [
     title: "Programming",
     accent: "rose",
     skills: [
-      { name: "TypeScript", url: "https://www.typescriptlang.org/" },
+      { name: "Typescript", url: "https://www.typescriptlang.org/" },
       { name: "PHP", url: "https://www.php.net/" },
       { name: "Java", url: "https://www.java.com/" },
       { name: "Python", url: "https://www.python.org/" },
