@@ -18,6 +18,7 @@ export const skillGroups: SkillGroupData[] = [
       { name: "Typescript", url: "https://www.typescriptlang.org/" },
       { name: "PHP", url: "https://www.php.net/" },
       { name: "Java", url: "https://www.java.com/" },
+      { name: "C#", url: "https://learn.microsoft.com/en-us/dotnet/csharp/" },
       { name: "Python", url: "https://www.python.org/" },
       { name: "Lua", url: "https://www.lua.org/" },
       { name: "Bash", url: "https://www.gnu.org/software/bash/" },
