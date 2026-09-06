@@ -18,7 +18,7 @@ const { title, description, tags, repo, live, images = [] } = Astro.props;
 const hasImages = images.length > 0;
 ---
 
-<div class:list={['group bg-rosepine-surface rounded-2xl overflow-hidden hover:bg-rosepine-overlay focus-within:bg-rosepine-overlay transition-all flex flex-col', hasImages && 'md:flex-row']}>
+<div tabindex="0" class:list={['group bg-rosepine-surface rounded-2xl overflow-hidden hover:bg-rosepine-overlay focus-within:bg-rosepine-overlay transition-all flex flex-col outline-none', hasImages && 'md:flex-row']}>
   {hasImages && (
     <div class="w-full md:w-2/5 min-h-[200px] md:min-h-0 flex-shrink-0 relative">
       <div
@@ -86,7 +86,9 @@ const hasImages = images.length > 0;
         </a>
       </div>
     </div>
-    <p class="text-rosepine-subtle text-sm leading-relaxed mb-6 font-body line-clamp-3">{description}</p>
+    <div class="project-desc-wrap relative mb-6">
+      <p class="project-desc text-rosepine-subtle text-sm leading-relaxed font-body">{description}</p>
+    </div>
     <div class="flex flex-wrap gap-2">
       {tags.map((tag) => (
         <span class="text-xs font-mono px-2 py-1 bg-rosepine-base text-rosepine-iris rounded">{tag}</span>
@@ -170,3 +172,29 @@ const hasImages = images.length > 0;
 
   document.addEventListener('DOMContentLoaded', initCarousels);
 </script>
+
+<style>
+  @media (max-width: 767px) {
+    .project-desc-wrap {
+      max-height: 4.5rem;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    .project-desc-wrap::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1.5rem;
+      background: linear-gradient(transparent, theme('colors.rosepine.surface'));
+      transition: opacity 0.3s ease;
+    }
+    .group:focus-within .project-desc-wrap {
+      max-height: 50rem;
+    }
+    .group:focus-within .project-desc-wrap::after {
+      opacity: 0;
+    }
+  }
+</style>
